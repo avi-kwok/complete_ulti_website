@@ -1,0 +1,231 @@
+
+<%- include('include/_gameheader') %>
+<%- include('include/_liveTrackingTable') %>
+
+    <script>
+        function gameOver(){
+            array=[0,1];
+            data = {p: array};
+            fetch('/api/gameOver', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                window.location.href = "http://localhost:3000/match-history";
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+        
+        const eventLine = [];
+        const playing = [];
+
+        function increment(button) {
+            const rowIndex = button.closest('tr').querySelector('span').id.split('_')[1];
+            const countSpan = button.closest('td').querySelector(`#countValue_${rowIndex}`);
+
+            let count = parseInt(countSpan.innerText, 10) + 1;
+
+            countSpan.innerText = count;
+
+            const name = button.closest('tr').querySelector('td:first-child').innerText;
+            const columnHeader = getHeaderFromColumnIndex(button.closest('td').cellIndex);
+
+            eventLine.push([name, columnHeader]);
+        }
+
+        function decrement(button) {
+            const rowIndex = button.closest('tr').querySelector('span').id.split('_')[1];
+            const countSpan = button.closest('td').querySelector(`#countValue_${rowIndex}`);
+            let count = parseInt(countSpan.innerText, 10) - 1;
+
+            count = Math.max(count, 0);
+
+            countSpan.innerText = count;
+
+            const name = button.closest('tr').querySelector('td:first-child').innerText;
+            const columnHeader = getHeaderFromColumnIndex(button.closest('td').cellIndex);
+
+            const indexToRemove = findNewestInstance(name, columnHeader);
+
+            if (indexToRemove !== -1) {
+                eventLine.splice(indexToRemove, 1);
+            }
+        }
+
+        function findNewestInstance(name, columnHeader) {
+            return eventLine.reverse().findIndex(([n, h]) => n === name && h === columnHeader);
+        }
+
+        function getHeaderFromColumnIndex(columnIndex) {
+            const table = document.querySelector('.table');
+            const headers = Array.from(table.querySelectorAll('thead th:not(.hidden)'));
+            return headers[columnIndex].innerText;
+        }
+    
+        function updatePlayingArray(button) {
+            const name = button.closest('tr').querySelector('td:first-child').innerText;
+
+            if (playing.includes(name)) {
+                playing.splice(playing.indexOf(name), 1);
+            } else {
+                playing.push(name);
+            }
+        }
+
+        function goal(checkbox) {
+            const name = checkbox.closest('tr').querySelector('td:first-child').innerText;
+
+            if (checkbox.checked) {
+                eventLine.push([name, 'Goal']);
+            } else {
+                const indexToRemove = findNewestInstance(name, 'Goal');
+                if (indexToRemove !== -1) {
+                    eventLine.splice(indexToRemove, 1);
+                }
+            }
+        }
+
+        function assist(checkbox) {
+            const name = checkbox.closest('tr').querySelector('td:first-child').innerText;
+
+            if (checkbox.checked) {
+                eventLine.push([name, 'Assist']);
+            } else {
+                const indexToRemove = findNewestInstance(name, 'Assist');
+                if (indexToRemove !== -1) {
+                    eventLine.splice(indexToRemove, 1);
+                }
+            }
+        }
+
+        function nextPoint() {
+            const data = {
+                eventLine: eventLine,
+                playing: playing
+            };
+
+            fetch('/api/updateEventList', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            })
+            .then(response => response.json())
+            .then(data => {
+                eventLine.length = 0;
+                window.location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+
+        function sortTable(rowColumn, column) {
+            const table = document.querySelector('.table');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr:not(.hidden)'));
+            
+            const columnIndex = column;
+            const columnButton = table.querySelector(`#sortButton${rowColumn}`);
+            const columnHeader = columnButton.closest('th');
+
+            rows.sort((a, b) => {
+                const aValue = a.children[columnIndex].innerText;
+                const bValue = b.children[columnIndex].innerText;
+
+                if (columnIndex === 0 || columnIndex === 1) {
+                    return aValue.localeCompare(bValue, undefined, { numeric: true, sensitivity: 'base' });
+                } else {
+                    return aValue.localeCompare(bValue, undefined, { numeric: true, sensitivity: 'base' });
+                }
+            });
+
+            if (columnIndex === 0 || columnIndex === 1)  {
+                rows.reverse(); 
+            }
+
+            rows.reverse();
+
+            rows.forEach(row => tbody.appendChild(row));
+
+            const buttons = table.querySelectorAll('.btn');
+            buttons.forEach(button => button.classList.remove('sorted'));
+            const headers = table.querySelectorAll('thead th');
+            headers.forEach(header => header.classList.remove('sorted'));
+
+            columnButton.classList.add('sorted');
+            columnHeader.classList.add('sorted');
+        }
+
+
+
+
+        let advancedCheck = false;
+        let currentCheck = false;
+        
+        function showAdvanced(id){
+            if (advancedCheck){
+                resetData(id);
+            }
+            else {
+                currentCheck = false;
+                advancedCheck = true;
+                document.querySelectorAll('.currentPoint').forEach(element => {
+                    element.classList.add('hidden');
+                })
+                document.querySelectorAll('.current').forEach(element =>{
+                        element.classList.add('hidden');
+                })
+                document.querySelectorAll('.advanced').forEach(element =>{
+                    element.classList.remove('hidden');
+                })
+            }
+        }
+
+        function showCurrent(id){
+            if (currentCheck){
+                resetData(id);
+            }
+            else {
+                advancedCheck = false;
+                currentCheck = true;
+                document.querySelectorAll('.currentPoint').forEach(element => {
+                    element.classList.add('hidden');
+                })
+                document.querySelectorAll('.current').forEach(element =>{
+                        element.classList.remove('hidden');
+                })
+                document.querySelectorAll('.advanced').forEach(element =>{
+                    element.classList.add('hidden');
+                })
+            }
+        }
+
+        function resetData(id){
+            currentCheck = false;
+            advancedCheck = false;
+            document.querySelectorAll('.currentPoint').forEach(element => {
+                    element.classList.remove('hidden');
+                })
+            document.querySelectorAll('.current').forEach(element =>{
+                    element.classList.add('hidden');
+            })
+            document.querySelectorAll('.advanced').forEach(element =>{
+                element.classList.add('hidden');
+            })
+        }
+    </script>
+
+<%- include('include/_footer') %>

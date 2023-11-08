@@ -1,0 +1,117 @@
+<%- include('include/_gameheader') %>
+
+<main id="site-main">
+    <div class="container">
+        <div class="box-nav d-flex">
+            <a id="backButton" href="/match-history" class="text-gradient"><i class="fas fa-angle-double-left"></i> Back </a>
+        </div>
+        <form>
+            <table class="table">
+                <thead>
+                    <tr id="head">
+                        <th>Name</th>
+                        <th>Final Score</th>
+                        <th>Date</th>
+                        <th>Starting</th>
+                        <th>Location</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <tr id="dataBody">
+                            <td><%= selectedMatch.team%></td>
+                            <td><%= selectedMatch.ourScore %><%= "-" %><%= selectedMatch.theirScore %></td>
+                            <td><%= selectedMatch.date %></td>
+                            <td><%= selectedMatch.od%></td>
+                            <td><%= selectedMatch.location%></td>
+                        </tr>
+            </tbody>
+        </table>
+        <table>
+            <thead>
+                <tr>
+                    <th class="forever hidden"></th>
+                    <th class="forever hidden"></th>
+                    <th class="forever hidden"></th>
+                    <th class="forever hidden"></th>
+                    <th class="forever hidden"></th>
+                </tr>
+            </thead>
+        </table>
+    </form>
+
+    <form>
+            <table class="table">
+                <thead>
+                    <tr id="head2">
+                        <th>Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <% let checker = false %>
+                <tbody>
+                            <% selectedMatch.eventList.forEach(eventArray => { %>
+                                <tr>
+                                    <% if (Number.isInteger(parseInt(eventArray[0].charAt(0)))){ %>
+                                        <tr id="pointBreak">
+                                            <th colspan="2"><%= eventArray %></th>
+                                        </tr>
+                                            
+                                    <% } else if (eventArray == "Opponents scored") {%>
+                                        <tr>
+                                            <th id="opp" colspan="2"><%= eventArray %></th>
+                                        </tr>
+                                        <% } else {%>
+                                            <% if (eventArray[1] == "Goal" || eventArray[1] == "Assist"){ %>
+                                                <td id="notOpp"><%= eventArray[0] %></td>
+                                                <td id="notOpp"><%= eventArray[1] %></td>
+                                            <% } else { %>
+                                                <td><%= eventArray[0] %></td>
+                                                <td><%= eventArray[1] %></td>
+                                            <% } %>
+                                        <% } %>
+                                </tr>
+                            <% }) %>
+                </tbody>
+                
+            </table>
+        </form>
+    </div>
+</main>
+
+<script>
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+            const backButton = document.getElementById('backButton');
+            if (backButton) {
+                backButton.click();
+            }
+        }
+    });
+</script>
+
+
+<style>
+    #head {
+        background-color: #05124a;
+        color: #fff;
+    }
+    #head2 {
+    background-color: #000e7a;
+    color: #fff;
+    text-align: center;
+    }
+    #pointBreak {
+        background-color: #291234;
+        color: #fff;
+    }
+
+    #notOpp{
+        background-color: rgb(197, 252, 197);
+    }
+
+    #opp {
+        background-color: rgb(255, 188, 188);
+    }
+</style>
+
+<%- include('include/_footer') %>

@@ -1,0 +1,268 @@
+<%- include('include/_header') %>
+
+<main id="site-main">
+    <div class="container">
+        <div class="box-nav d-flex justify-between">
+            <a id="backButton" onclick="showAllData()" class="text-gradient hidden"><i class="fas fa-angle-double-left"></i> Back</a>
+            <a href="/" class="border-shadow showDataHide">
+                <span class="text-gradient">Player List <i class="fas fa-user"></i></span>
+            </a>
+            <a href="/leaderboard" class="border-shadow showDataHide" id="leaderboardButton">
+                <span class="text-gradient">Leaderboard <i class="fas fa-star"></i></span>
+            </a>
+            <a href="/start-game" class="border-shadow showDataHide">
+                <span class="text-gradient">New Match <i class="fas fa-futbol"></i></span>
+            </a>
+        </div>
+
+        <form>
+            <table class="table">
+                    <thead>
+                        <tr id="head" class="hidden">
+                            <th>Name</th>
+                            <th>Final Score</th>
+                            <th>Date</th>
+                            <th>Starting</th>
+                            <th>Location</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (matchHistory.length == 0){ %>
+                            <tr class="head">
+                                <th>No previous match histories recorded.</th>
+                            </tr>
+                            <% } %>
+                        <% for(let i = 0; i < matchHistory.length; i++) { %>
+                            <tr class="showDataHide table-row <%= matchHistory[i].win ? 'win' : 'loss' %>" onclick="showData(this)" id="<%= i %>" >
+                                <td>
+                                    <%= matchHistory[i].team%>
+                                    <%= " - "%><%= matchHistory[i].date%>
+                                    <br>
+                                    <%= matchHistory[i].ourScore %><%= "-" %><%= matchHistory[i].theirScore %>
+                                    <br>
+
+                                    <a id="deletebut" class="delete" data-id=<%= matchHistory[i]._id%> onclick="no()">
+                                        <span class="xBut"><i class="fas fa-times"></i></span>
+                                    </a>
+                                </td>
+                            </tr>
+
+                            <tr class="hidden" id="dataBody">
+                                <td><%= matchHistory[i].team%></td>
+                                <td><%= matchHistory[i].ourScore %><%= "-" %><%= matchHistory[i].theirScore %></td>
+                                <td><%= matchHistory[i].date %></td>
+                                <td><%= matchHistory[i].od%></td>
+                                <td><%= matchHistory[i].location%></td>
+                            </tr>
+                        <% }; %>
+                </tbody>
+            </table><table>
+                <thead>
+                    <tr>
+                        <th class="forever hidden"></th>
+                        <th class="forever hidden"></th>
+                        <th class="forever hidden"></th>
+                        <th class="forever hidden"></th>
+                        <th class="forever hidden"></th>
+                    </tr>
+                </thead>
+            </table>
+
+        </form>
+        <form>
+            <table class="table">
+                <thead>
+                    <tr class="hidden" id="head2">
+                        <th>Name</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <% let checker = false %>
+                <% for(let j = 0; j < matchHistory.length; j++) { %>
+                <tbody class="hidden" id="dataBody2">
+                            <% matchHistory[j].eventList.forEach(eventArray => { %>
+                                <tr>
+                                    <% if (Number.isInteger(parseInt(eventArray[0].charAt(0)))){ %>
+                                        <% if (!checker) { %>
+                                        <tr id="pointBreak">
+                                            <th colspan="2"><%= eventArray %></th>
+                                        </tr>
+                                        <% checker = true %>
+                                        <% } else {checker = false} %>
+                                    <% } else if (eventArray == "Opponents scored") {%>
+                                        <tr>
+                                            <th id="opp" colspan="2" ><%= eventArray %></th>
+                                        </tr>
+                                        <% checker = false %>
+                                    <% } else {%>
+                                        <% if (eventArray[1] == "Goal" || eventArray[1] == "Assist"){ %>
+                                            <td id="notOpp"><%= eventArray[0] %></td>
+                                            <td id="notOpp"><%= eventArray[1] %></td>
+                                        <% } else { %>
+                                            <td><%= eventArray[0] %></td>
+                                            <td><%= eventArray[1] %></td>
+                                        <% } %>
+                                        <% checker = false %>
+                                    <% } %>
+                                </tr>
+                            <% }) %>
+                </tbody>
+                <% }; %>
+            </table>
+        </form>
+    </div>
+</main>
+
+<script>
+    let currentIndex;
+    let xstop;
+
+    function no (){
+        xstop = false;
+    }
+
+    //change button based on WL
+    function changeColour(row) {
+        if (row.classList.contains('win')) {
+            row.classList.remove('win');
+            row.classList.add('loss');
+        } else {
+            row.classList.remove('loss');
+            row.classList.add('win');
+        }
+    }
+
+    //seamless transitions
+    function showData(row) {
+        if (!xstop){
+            xstop = true;
+            return;
+        }
+        document.querySelectorAll('.hidden').forEach(element => {
+            element.classList.remove('hidden');
+            element.classList.add('jeb');
+        });
+        document.querySelectorAll('.showDataHide').forEach(element => {
+            element.classList.add('hidden');
+        });
+
+        currentIndex = row.id;
+        let x=0;
+        document.querySelectorAll('#dataBody').forEach(element => {
+            if (x != currentIndex){
+                element.classList.add('hidden');
+            }
+            
+            x++;
+        })
+
+        x=0;
+        document.querySelectorAll('#dataBody2').forEach(element => {
+            if (x != currentIndex){
+                
+                element.classList.add('hidden');
+            }
+            x++;
+        })
+    }
+
+    function showAllData() {
+        document.querySelectorAll('#showDataHide').forEach(element => {
+            element.classList.remove('hidden');
+        });
+
+        document.querySelectorAll('.jeb').forEach(element => {
+            element.classList.add('hidden');
+        });
+        document.querySelectorAll('.showDataHide').forEach(element => {
+            element.classList.remove('hidden');
+        });
+    }
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+            showAllData();
+        }
+    });
+
+    function getCurrentIndex () {
+        return currentIndex;
+    }
+
+</script>
+
+
+<style>
+    .xBut {
+        color: red;
+    }
+
+    #head {
+        background-color: #00417a;
+        color: #fff;
+    }
+
+    .table-row.win,
+    #notOpp{
+        background-color: rgb(197, 252, 197);
+    }
+
+    .table-row.win:hover {
+        background-color: rgb(197, 252, 197);
+        cursor: pointer;
+    }
+
+    .table-row.loss,
+    #opp {
+        background-color: rgb(255, 188, 188);
+    }
+
+    .table-row.loss:hover {
+        background-color: rgb(255, 188, 188);
+        cursor: pointer;
+    }
+
+    #pointBreak {
+        background-color: #223647;
+        color: #fff;
+    }
+
+    #leaderboardButton {
+        margin-left: 8px;
+    }
+
+    .table td {
+        border: 0cm;
+    }
+
+    .table tr:hover {
+        background-color: #fff;
+    }
+
+
+    .hidden {
+        display: none;
+    }
+
+    #backButton {
+        cursor: pointer;
+    }
+
+    .forever {
+        color: #fff;
+    }
+
+    #head2 {
+    background-color: #007a76;
+    color: #fff;
+    text-align: center;
+    }
+
+    #dataBody2 {
+        text-align: center;
+    }
+</style>
+
+
+<%- include('include/_footer') %>
+            

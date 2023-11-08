@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Website</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Header -->
+    <header id="header">
+        <nav>
+            <div class="container">
+                <div class="text-center">
+                    <a class="nav-brand text-dark" id="headerText"></a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <!-- /Header -->
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                const path = window.location.pathname;
+                let headerVal;
+                if (path.includes('/leaderboard')) {
+                    headerVal = 'Leaderboard';
+                } 
+                else if (path.includes('match-history')) {
+                    headerVal = "Match History"
+                }
+                else if (path.includes('/selected-players')) {
+                    headerVal = 'Selected Players';
+                } 
+                else if (path.includes('/start-game')) {
+                    headerVal = 'New Match';
+                }
+                
+                else {
+                    headerVal = 'Player List';
+                }
+
+                // Set the header text
+                document.getElementById('headerText').innerText = headerVal;
+            } catch (error) {
+                console.error('Error in script:', error);
+            }
+        });
+    </script>
+
+</body>
+</html>

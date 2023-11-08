@@ -1,0 +1,64 @@
+ <!-- form handling -->
+ <form action="/api/users" method="POST" id="add_user">
+    <div class="new_user">
+        <div class="form-group">
+            <label for="name" class="text-light">Name</label>
+            <input type="hidden" name="id" value="">
+            <input type="text" name="name" value="" placeholder="">
+        </div>
+        <div class="form-group">
+            <label for="age" class="text-light">Age</label>
+            <input type="text" name="age" value="" placeholder="">
+        </div>
+        <div class="form-group">
+            <label for="number" class="text-light">Number</label>
+            <input type="text" name="number" value="" placeholder="">
+        </div>
+        <div class="form-group">
+            <label for="gender" class="text-light">Gender</label>
+            <div class="radio inline">
+                <input type="radio" id="radio-2" name="gender" value="Male" >
+                <label for="radio-2" class="radio-label">Male</label>
+            </div>
+            <div class="radio inline">
+                <input type="radio" id="radio-3" name="gender" value="Female" >
+                <label for="radio-3" class="radio-label">Female</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="position" class="text-light">Position</label>
+            <div class="radio inline">
+                <input type="radio" id="radio-4" name="position" value="Handler" >
+                <label for="radio-4" class="radio-label">Handler</label>
+            </div>
+            <div class="radio inline">
+                <input type="radio" id="radio-5" name="position" value="Cutter" >
+                <label for="radio-5" class="radio-label">Cutter</label>
+            </div>
+            <div class="radio inline">
+                <input type="radio" id="radio-6" name="position" value="Hybrid" >
+                <label for="radio-6" class="radio-label">Hybrid</label>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="contact" class="text-light">Contact</label>
+            <input type="text" name="contact" value="" placeholder="">
+        </div>
+        <div class="form-group">
+            <label for="status" class="text-light">Status</label>
+            <input type="text" name="status" value="" placeholder="">
+        </div>
+        <div class="form-group">
+            <label for="note" class="text-light">Note</label>
+            <input type="text" name="note" value="" placeholder="">
+        </div>
+
+
+        <div class="form-group">
+            <button type="submit" class="btn text-dark update">Save</button></a>
+            
+        </div>
+    </div>
+</form>

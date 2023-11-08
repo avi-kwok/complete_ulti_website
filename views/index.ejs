@@ -1,0 +1,44 @@
+
+<%- include('include/_header') %>
+
+
+    <main id="site-main">
+        <div class="container">
+            <div class="box-nav d-flex justify-between">
+                <a href="/add-user" class="border-shadow" id="newPlayer">New Player <i class="fas fa-user"></i>
+                </a>
+                <a id='homeLeadButton' href="/leaderboard" class="border-shadow">
+                    <span class="text-gradient">Leaderboard <i class="fas fa-star"></i></span>
+                </a>
+                <a href="/match-history" class="border-shadow">
+                    <span class="text-gradient">Match History <i class="fas fa-futbol"></i></span>
+                </a>
+            </div>
+
+            <form action="/" method="POST">
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Number</th>
+                            <th>Gender</th>
+                            <th>Position</th>
+                            <th>Contact</th>
+                            <th>Status</th>
+                            <th>Note</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <%- include('include/_show') %>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </main>
+
+
+<%- include('include/_footer') %>
+
+

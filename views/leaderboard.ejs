@@ -1,0 +1,176 @@
+<%- include('include/_header') %>
+
+
+    <main id="site-main">
+        <div class="container">
+            
+            <div class="box-nav d-flex justify-between">
+                
+                <a href="/" class="border-shadow">
+                    <span class="text-gradient">Player List <i class="fas fa-user"></i></span>
+                </a>
+                <a id="leaderboardButton" href="/leaderboard" class="border-shadow">
+                    <span class="text-gradient">Leaderboard <i class="fas fa-star"></i></span>
+                </a>
+                <a href="/match-history" class="border-shadow">
+                    <span class="text-gradient">Match History <i class="fas fa-futbol"></i></span>                
+                </a>
+            </div>
+
+            <form action="/" method="POST">
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th><button type='button' onclick="sortTable(0)" class="btn" id="sortButton0">Name</button></th>
+                            <th><button type='button' onclick="sortTable(1)" class="btn" id="sortButton1">Position</button></th>
+                            <th><button type='button' onclick="sortTable(2)" class="btn" id="sortButton2">Goals</button></th>
+                            <th><button type='button' onclick="sortTable(3)" class="btn" id="sortButton3">Assists</button></th>
+                            <th><button type='button' onclick="sortTable(4)" class="btn" id="sortButton4">Turnovers</button></th>
+                            <th><button type='button' onclick="sortTable(5)" class="btn" id="sortButton5">Blocks</button></th>
+                            <th><button type='button' onclick="sortTable(6)" class="btn" id="sortButton6">Points Played</button></th>
+                            <th><button type='button' onclick="sortTable(7)" class="btn" id="sortButton7">Goals per Point </button></th>
+                            <th><button type='button' onclick="sortTable(8)" class="btn" id="sortButton8">Assists per Point</button></th>
+                            <th><button type='button' onclick="sortTable(9)" class="btn" id="sortButton9">Turnovers per Point</button></th>
+                            <th><button type='button' onclick="sortTable(10)" class="btn" id="sortButton10">Blocks per Point</button></th>
+                            <th><button type='button' onclick="sortTable(11)" class="btn" id="sortButton11">PR</button></th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody>
+                        <% for(var i = 0; i < users.length; i++) { %>
+                            <tr>
+                                <td><%= users[i].name %></td>
+                                <td><%= users[i].position %></td>
+                                <td><%= users[i].goals %></td>
+                                <td><%= users[i].assists %></td>
+                                <td><%= users[i].turnovers %></td>
+                                <td><%= users[i].blocks %></td>
+                                <td><%= users[i].pointsPlayed %></td>
+                                <% if (Number.isNaN(users[i].goals/users[i].pointsPlayed)) { %>
+                                    <td>0</td>
+                                <% } else { %>
+                                    <td><%= parseFloat(users[i].goals/users[i].pointsPlayed).toFixed(2)%></td><% } %>
+                                <% if (Number.isNaN(users[i].assists/users[i].pointsPlayed)) { %>
+                                    <td>0</td>
+                                <% } else { %>
+                                    <td><%= parseFloat(users[i].assists/users[i].pointsPlayed).toFixed(2)%></td><% } %>
+                                <% if (Number.isNaN(users[i].turnovers/users[i].pointsPlayed)) { %>
+                                    <td>0</td>
+                                <% } else { %>
+                                    <td><%= parseFloat(users[i].turnovers/users[i].pointsPlayed).toFixed(2)%></td><% } %>
+                                <% if (Number.isNaN(users[i].blocks/users[i].pointsPlayed)) { %>
+                                    <td>0</td>
+                                <% } else { %>
+                                    <td><%= parseFloat(users[i].blocks/users[i].pointsPlayed).toFixed(2)%></td> <% } %>
+                                <% if (Number.isNaN(users[i].blocks/users[i].pointsPlayed)) { %>
+                                    <td>0</td>
+                                <% } else { %>
+                                    <td><%= parseFloat((users[i].goals+users[i].assists+users[i].blocks-users[i].turnovers)/users[i].pointsPlayed).toFixed(2)%></td> <% } %>
+                            </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+                <table class="table">
+                        <th>
+                            <button id="factory" type='button' onclick="resetAllData()" class="btn">Reset All Data</button>
+                        </th>
+                    
+                </table>
+            </form>
+        </div>
+    </main>
+
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                const path = window.location.pathname;
+                const leaderboardButton = document.getElementById('leaderboardButton');
+                
+                if (path.includes('/leaderboard')) {
+                    leaderboardButton.classList.add('deactivated');
+                }
+            } catch (error) {
+                console.error('Error in script:', error);
+            }
+        });
+
+
+        function sortTable(column) {
+            const table = document.querySelector('.table');
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+
+            const columnIndex = column;
+            const columnButton = table.querySelector(`#sortButton${columnIndex}`);
+            const columnHeader = columnButton.closest('th');
+
+            rows.sort((a, b) => {
+                const aValue = a.children[columnIndex].innerText;
+                const bValue = b.children[columnIndex].innerText;
+
+                if (columnIndex === 0 || columnIndex === 1) {
+                    return aValue.localeCompare(bValue, undefined, { numeric: true, sensitivity: 'base' });
+                } else {
+                    return aValue.localeCompare(bValue, undefined, { numeric: true, sensitivity: 'base' });
+                }
+            });
+
+            if (columnIndex === 0 || columnIndex === 1)  {
+                rows.reverse(); 
+            }
+
+            rows.reverse();
+            rows.forEach(row => tbody.appendChild(row));
+            const buttons = table.querySelectorAll('.btn');
+            buttons.forEach(button => button.classList.remove('sorted'));
+            const headers = table.querySelectorAll('thead th');
+            headers.forEach(header => header.classList.remove('sorted'));
+            columnButton.classList.add('sorted');
+            columnHeader.classList.add('sorted');
+        }
+
+        function resetAllData() {
+            array=[0,1];
+            data = {p: array};
+            fetch('/api/users', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                window.location.reload()
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle errors gracefully, such as displaying an alert to the user
+            });
+}
+
+    </script>
+
+    <style>
+        #leaderboardButton {
+            margin-left: 25px;
+        }
+
+        #factory {
+            background-color: #a80909;
+            width: 30%;
+        }
+        #factory:hover {
+            background-color: #a80909;
+        }
+
+    </style>
+
+<%- include('include/_footer') %>

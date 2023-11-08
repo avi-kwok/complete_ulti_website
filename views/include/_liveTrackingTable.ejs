@@ -1,0 +1,169 @@
+    <main id="site-main">
+        <div class="container">
+            <div class="box-nav d-flex justify-between">
+                <a id="advancedB" onclick="showAdvanced(this.id)" class="border-shadow ad">
+                    <span class="text-gradient2">Advanced Stats <i class="fas fa-eye"></i></span>
+                </a>
+                <a id="currentB" onclick="showCurrent(this.id)" class="border-shadow ad">
+                    <span class="text-gradient2">Current Game Stats <i class="fas fa-eye"></i></span>
+                </a>
+                <a onclick="nextPoint()" id="nextbut" class="border-shadow">
+                    <span class="text-gradient2">Next Point <i class="fas fa-arrow-right"></i></span>
+                </a>
+                <a id="GameOver" class="border-shadow" href="/game-over">
+                    <span class="text-gradient2">Game Over <i class="fas fa-check"></i></span>
+                </a>
+            </div>
+            <form id="liveTrackingForm" class="d-flex">
+                <table class="table">
+                    <thead class="thead-dark">
+                        <tr class="currentPoint">
+                            <th><button type='button' onclick="sortTable(0, 0)" class="btn" id="sortButton0" disabled = true>Name</button></th>
+                            <th><button type='button' onclick="sortTable(1, 1)" class="btn" id="sortButton1" disabled = true>Gender</button></th>
+                            <th><button type='button' onclick="sortTable(2, 2)" class="btn" id="sortButton2" disabled = true>Position</button></th>
+                            <th><button type='button' onclick="sortTable(3, 3)" class="btn" id="sortButton3" disabled = true>Goal</button></th>
+                            <th><button type='button' onclick="sortTable(4, 4)" class="btn" id="sortButton4" disabled = true>Assist</button></th>
+                            <th><button type='button' onclick="sortTable(5, 5)" class="btn" id="sortButton5" disabled = true>Turnover</button></th>
+                            <th><button type='button' onclick="sortTable(6, 6)" class="btn" id="sortButton6" disabled = true>Block</button></th>
+                            <th><button type='button' onclick="sortTable(7, 7)" class="btn" id="sortButton7" disabled = true>Playing</button></th>
+                        </tr>
+                        <tr class="hidden current">
+                            <th><button type='button' onclick="sortTable(8, 0)" class="btn" id="sortButton8">Name</button></th>
+                            <th><button type='button' onclick="sortTable(9, 1)" class="btn" id="sortButton9">Gender</button></th>
+                            <th><button type='button' onclick="sortTable(10, 2)" class="btn" id="sortButton10">Position</button></th>
+                            <th><button type='button' onclick="sortTable(11, 3)" class="btn" id="sortButton11">Goals</button></th>
+                            <th><button type='button' onclick="sortTable(12, 4)" class="btn" id="sortButton12">Assists</button></th>
+                            <th><button type='button' onclick="sortTable(13, 5)" class="btn" id="sortButton13">Turnovers</button></th>
+                            <th><button type='button' onclick="sortTable(14, 6)" class="btn" id="sortButton14">Blocks</button></th>
+                            <th><button type='button' onclick="sortTable(15, 7)" class="btn" id="sortButton15">Points Played</button></th>
+                        </tr>
+                        <tr class="hidden advanced">
+                            <th><button type='button' onclick="sortTable(16, 0)" class="btn" id="sortButton16">Name</button></th>
+                            <th><button type='button' onclick="sortTable(17, 1)" class="btn" id="sortButton17">Gender</button></th>
+                            <th><button type='button' onclick="sortTable(18, 2)" class="btn" id="sortButton18">Position</button></th>
+                            <th><button type='button' onclick="sortTable(19, 3)" class="btn" id="sortButton19">Goals</button></th>
+                            <th><button type='button' onclick="sortTable(20, 4)" class="btn" id="sortButton20">Assists</button></th>
+                            <th><button type='button' onclick="sortTable(21, 5)" class="btn" id="sortButton21">Turnovers</button></th>
+                            <th><button type='button' onclick="sortTable(22, 6)" class="btn" id="sortButton22">Blocks</button></th>
+                            <th><button type='button' onclick="sortTable(23, 7)" class="btn" id="sortButton23">Points Played</button></th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody>
+                        <% for(var i = 0; i < users.length; i++) { %>
+                            <tr class="currentPoint" id="counter">
+                                <td><%= users[i].name %></td>
+                                <td><%= users[i].gender %></td>
+                                <td><%= users[i].position %></td>
+                                <td><input type="checkbox" onclick="goal(this)" class="goal" data-name="<%= users[i].name %>"></td>
+                                <td><input type="checkbox" onclick="assist(this)" class="assist" data-name="<%= users[i].name %>"></td>
+
+                                <% for(var j = 0; j < 2; j++) { %>
+                                    <td>
+                                        <div>
+                                            <button type="button" onclick="increment(this)">+</button>
+                                            <span id="countValue_<%= i %>">0</span>
+                                            <button type="button" onclick="decrement(this)">-</button>
+                                        </div>
+                                    </td>
+                                <% } %>
+                                <td><input type="checkbox" onclick="updatePlayingArray(this)"></td> 
+                            </tr>
+                            <tr class="hidden current">
+                                <td><%= users[i].name %></td>
+                                <td><%= users[i].gender %></td>
+                                <td><%= users[i].position %></td>
+                                <td><%= users[i].cGoals %></td>
+                                <td><%= users[i].cAssists %></td>
+                                <td><%= users[i].cTurnovers %></td>
+                                <td><%= users[i].cBlocks %></td>
+                                <td><%= users[i].cPointsPlayed %></td>
+                            </tr>
+                            <tr class="hidden advanced">
+                                <td><%= users[i].name %></td>
+                                <td><%= users[i].gender %></td>
+                                <td><%= users[i].position %></td>
+                                <% if (Number.isNaN(users[i].goals/users[i].pointsPlayed)) { %>
+                                    <td>0</td>
+                                <% } else { %>
+                                    <td><%= parseFloat(users[i].goals/users[i].pointsPlayed).toFixed(2)%></td><% } %>
+                                <% if (Number.isNaN(users[i].assists/users[i].pointsPlayed)) { %>
+                                    <td>0</td>
+                                <% } else { %>
+                                    <td><%= parseFloat(users[i].assists/users[i].pointsPlayed).toFixed(2)%></td><% } %>
+                                <% if (Number.isNaN(users[i].turnovers/users[i].pointsPlayed)) { %>
+                                    <td>0</td>
+                                <% } else { %>
+                                    <td><%= parseFloat(users[i].turnovers/users[i].pointsPlayed).toFixed(2)%></td><% } %>
+                                <% if (Number.isNaN(users[i].blocks/users[i].pointsPlayed)) { %>
+                                    <td>0</td>
+                                <% } else { %>
+                                    <td><%= parseFloat(users[i].blocks/users[i].pointsPlayed).toFixed(2)%></td> <% } %>
+                                <td><%= users[i].pointsPlayed %></td>
+                            </tr>
+                            <% } %>            
+                    </tbody>
+                    <thead class="thead">
+                        <tr class="hidden advanced miniHeader"><th colspan="9">Per Point Stats</th></tr>
+                    </thead>
+                    <thead class="thead">
+                        <tr class="hidden current miniHeader"><th colspan="9">Current Game Stats</th></tr>
+                    </thead>
+                </table>
+            </form> 
+        </div>
+    </main>
+
+
+
+    <style>
+        .d-flex {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #nextbut:hover,
+        #GameOver:hover,
+        input:hover,
+        button:hover {
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .miniHeader {
+            background-color: #0008a0; 
+            color: aliceblue;
+            font-size: 20px;
+            font-size: 75%; 
+            text-align: center;
+        }
+        .miniHeader2 {
+            color: aliceblue;
+            font-size: 20px;
+            font-size: 100%; 
+            text-align: center;
+        }
+
+        .ad:hover {
+            cursor: pointer;
+        }
+
+        #headerText {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 1ch; 
+            font-variant-numeric: tabular-nums; 
+            font-size: 24px; 
+        }
+
+        .sorted {
+            background-color: #0008a0;
+            color: #0008a0;
+        }
+
+
+
+    </style>
