@@ -16,7 +16,7 @@ const app = express();
 dotenv.config({
   path: 'config.env'
 });
-const PORT = process.env.PORT || 8080;
+const PORT = 3000;
 
 // log requests
 app.use(morgan('tiny'));
