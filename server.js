@@ -14,7 +14,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 dotenv.config({
-  path: 'config.env'
+  path: 'https://ultideploy.onrender.com'
 });
 const PORT = 3000;
 
