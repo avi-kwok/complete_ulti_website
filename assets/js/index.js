@@ -20,7 +20,7 @@ $("#update_user").submit(function(event){
     })
     
     var request = {
-        "url" : `http://localhost:3000/api/users/${data.id}`,
+        "url" : `https://ultideploy.onrender.com/api/users/${data.id}`,
         "method" : "PUT",
         "data" : data
     }
@@ -37,7 +37,7 @@ if(window.location.pathname == "/"){
         var id = $(this).attr("data-id")
 
         var request = {
-            "url" : `http://localhost:3000/api/users/${id}`,
+            "url" : `https://ultideploy.onrender.com/api/users/${id}`,
             "method" : "DELETE"
         }
 
@@ -57,7 +57,7 @@ if(window.location.pathname == "/match-history"){
         var id = $(this).attr("data-id")
 
         var request = {
-            "url" : `http://localhost:3000/api/matchHistory/${id}`,
+            "url" : `https://ultideploy.onrender.com/api/matchHistory/${id}`,
             "method" : "DELETE"
         }
 
@@ -75,7 +75,7 @@ if(window.location.pathname == "/leaderboard"){
     $ondelete = $(".table th #factory");
     $ondelete.click(function(){
         var request = {
-            "url" : `http://localhost:3000/api/users`,
+            "url" : `https://ultideploy.onrender.com/api/users`,
             "method" : "PUT"
         }
 
