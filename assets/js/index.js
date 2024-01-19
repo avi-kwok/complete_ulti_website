@@ -27,7 +27,7 @@ $("#update_user").submit(function(event){
 
     $.ajax(request).done(function(response){
         alert("Player updated successfully.");
-        window.location.href = "http://localhost:3000/"
+        window.location.href = "https://ultideploy.onrender.com/"
     })
 })
 
