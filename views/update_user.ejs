@@ -56,14 +56,20 @@
                         <label for="radio-6" class="radio-label">Hybrid</label>
                     </div>
                 </div>
-
+                <div class="form-group">
+                    <label for="status" class="text-light">Status</label>
+                    <div class="radio inline">
+                        <input type="radio" id="radio-7" name="status" value="Active" <%= user.status == 'Active' ? 'checked' : '' %> >
+                        <label for="radio-7" class="radio-label">Active</label>
+                    </div>
+                    <div class="radio inline">
+                        <input type="radio" id="radio-8" name="status" value="Inactive" <%= user.status == 'Inactive' ? 'checked' : '' %> >
+                        <label for="radio-8" class="radio-label">Inactive</label>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label for="contact" class="text-light">Contact</label>
                     <input type="text" name="contact" value="<%= user.contact%>" placeholder="">
-                </div>
-                <div class="form-group">
-                    <label for="status" class="text-light">Status</label>
-                    <input type="text" name="status" value="<%= user.status%>" placeholder="">
                 </div>
                 <div class="form-group">
                     <label for="note" class="text-light">Note</label>
