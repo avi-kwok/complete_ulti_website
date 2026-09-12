@@ -1,0 +1,284 @@
+<%- include('include/_gameheader') %>
+
+<main id="site-main">
+    <div class="container">
+        <div class="box-nav d-flex justify-between">
+            <a id="advancedB" onclick="showAdvanced(this.id)" class="border-shadow ad">
+                <span class="text-gradient2">Advanced Stats <i class="fas fa-eye"></i></span>
+            </a>
+            <a id="currentB" onclick="showCurrent(this.id)" class="border-shadow ad">
+                <span class="text-gradient2">Current Game Stats <i class="fas fa-eye"></i></span>
+            </a>
+            <a href="/live-tracking" id="nextbut" class="border-shadow">
+                <span class="text-gradient2">Next <i class="fas fa-arrow-right"></i></span>
+            </a>
+        </div>
+        <form id="liveTrackingForm" class="d-flex">
+            <div class="table-card">
+            <table class="table">
+                <thead class="thead-dark">
+                    <tr class="currentPoint">
+                        <th><button type='button' onclick="sortTable(0, 0)" class="btn" id="sortButton0" disabled = true>Name</button></th>
+                        <th><button type='button' onclick="sortTable(1, 1)" class="btn" id="sortButton1" disabled = true>Gender</button></th>
+                        <th><button type='button' onclick="sortTable(2, 2)" class="btn" id="sortButton2" disabled = true>Position</button></th>
+                        <th><button type='button' onclick="sortTable(3, 3)" class="btn" id="sortButton7" disabled = true>Playing</button></th>
+                    </tr>
+                    <tr class="hidden current">
+                        <th><button type='button' onclick="sortTable(4, 0)" class="btn" id="sortButton8">Name</button></th>
+                        <th><button type='button' onclick="sortTable(5, 1)" class="btn" id="sortButton9">Gender</button></th>
+                        <th><button type='button' onclick="sortTable(6, 2)" class="btn" id="sortButton10">Position</button></th>
+                        <th><button type='button' onclick="sortTable(7, 3)" class="btn" id="sortButton11">Goals</button></th>
+                        <th><button type='button' onclick="sortTable(8, 4)" class="btn" id="sortButton12">Assists</button></th>
+                        <th><button type='button' onclick="sortTable(9, 5)" class="btn" id="sortButton13">Turnovers</button></th>
+                        <th><button type='button' onclick="sortTable(10, 6)" class="btn" id="sortButton14">Blocks</button></th>
+                        <th><button type='button' onclick="sortTable(11, 7)" class="btn" id="sortButton15">Points Played</button></th>
+                    </tr>
+                    <tr class="hidden advanced">
+                        <th><button type='button' onclick="sortTable(12, 0)" class="btn" id="sortButton16">Name</button></th>
+                        <th><button type='button' onclick="sortTable(13, 1)" class="btn" id="sortButton17">Gender</button></th>
+                        <th><button type='button' onclick="sortTable(14, 2)" class="btn" id="sortButton18">Position</button></th>
+                        <th><button type='button' onclick="sortTable(15, 3)" class="btn" id="sortButton19">Goals</button></th>
+                        <th><button type='button' onclick="sortTable(16, 4)" class="btn" id="sortButton20">Assists</button></th>
+                        <th><button type='button' onclick="sortTable(17, 5)" class="btn" id="sortButton21">Turnovers</button></th>
+                        <th><button type='button' onclick="sortTable(18, 6)" class="btn" id="sortButton22">Blocks</button></th>
+                        <th><button type='button' onclick="sortTable(19, 7)" class="btn" id="sortButton23">Points Played</button></th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    <% for(var i = 0; i < users.length; i++) { %>
+                        <tr class="currentPoint" id="counter">
+                            <td><%= users[i].name %></td>
+                            <td><%= users[i].gender %></td>
+                            <td><%= users[i].position %></td>
+                            <td><input type="checkbox" onclick="updatePlayingArray(this)"></td> 
+                        </tr>
+                        <tr class="hidden current">
+                            <td><%= users[i].name %></td>
+                            <td><%= users[i].gender %></td>
+                            <td><%= users[i].position %></td>
+                            <td><%= users[i].cGoals %></td>
+                            <td><%= users[i].cAssists %></td>
+                            <td><%= users[i].cTurnovers %></td>
+                            <td><%= users[i].cBlocks %></td>
+                            <td><%= users[i].cPointsPlayed %></td>
+                        </tr>
+                        <tr class="hidden advanced">
+                            <td><%= users[i].name %></td>
+                            <td><%= users[i].gender %></td>
+                            <td><%= users[i].position %></td>
+                            <% if (Number.isNaN(users[i].goals/users[i].pointsPlayed)) { %>
+                                <td>0</td>
+                            <% } else { %>
+                                <td><%= parseFloat(users[i].goals/users[i].pointsPlayed).toFixed(2)%></td><% } %>
+                            <% if (Number.isNaN(users[i].assists/users[i].pointsPlayed)) { %>
+                                <td>0</td>
+                            <% } else { %>
+                                <td><%= parseFloat(users[i].assists/users[i].pointsPlayed).toFixed(2)%></td><% } %>
+                            <% if (Number.isNaN(users[i].turnovers/users[i].pointsPlayed)) { %>
+                                <td>0</td>
+                            <% } else { %>
+                                <td><%= parseFloat(users[i].turnovers/users[i].pointsPlayed).toFixed(2)%></td><% } %>
+                            <% if (Number.isNaN(users[i].blocks/users[i].pointsPlayed)) { %>
+                                <td>0</td>
+                            <% } else { %>
+                                <td><%= parseFloat(users[i].blocks/users[i].pointsPlayed).toFixed(2)%></td> <% } %>
+                            <td><%= users[i].pointsPlayed %></td>
+                        </tr>
+                        <% } %>            
+                </tbody>
+                <thead class="thead">
+                    <tr class="hidden advanced miniHeader"><th colspan="9">Per Point Stats</th></tr>
+                </thead>
+                <thead class="thead">
+                    <tr class="hidden current miniHeader"><th colspan="9">Current Game Stats</th></tr>
+                </thead>
+            </table>
+            </div>
+        </form>
+    </div>
+</main>
+
+
+
+<style>
+    .d-flex {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    #nextbut:hover,
+    #GameOver:hover,
+    input:hover,
+    button:hover {
+        cursor: pointer;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .miniHeader {
+        background-color: var(--card-sunken);
+        color: var(--text-tiny);
+        text-transform: uppercase;
+        letter-spacing: .05em;
+        font-size: 75%;
+        text-align: center;
+    }
+    .miniHeader2 {
+        color: var(--text-secondary);
+        font-size: 100%;
+        text-align: center;
+    }
+
+    .ad:hover {
+        cursor: pointer;
+    }
+
+</style>
+
+
+<script>
+    const playing = [];
+
+    
+
+    function findNewestInstance(name, columnHeader) {
+        return eventLine.reverse().findIndex(([n, h]) => n === name && h === columnHeader);
+    }
+
+    function getHeaderFromColumnIndex(columnIndex) {
+        const table = document.querySelector('.table');
+        const headers = Array.from(table.querySelectorAll('thead th:not(.hidden)'));
+        return headers[columnIndex].innerText;
+    }
+
+    function updatePlayingArray(button) {
+        const name = button.closest('tr').querySelector('td:first-child').innerText;
+
+        if (playing.includes(name)) {
+            playing.splice(playing.indexOf(name), 1);
+        } else {
+            playing.push(name);
+        }
+    }
+
+    function nextPoint() {
+        const data = {
+            playing: playing
+        };
+//update router model connection select_players liveTrackingTable liveTracking
+        fetch('/api/selectedPlayers', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        })
+        .then(response => response.json())
+        .then(data => {
+                window.location.href = "http://localhost:3000/live-tracking";
+            })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    function sortTable(rowColumn, column) {
+        const table = document.querySelector('.table');
+        const tbody = table.querySelector('tbody');
+        const rows = Array.from(tbody.querySelectorAll('tr:not(.hidden)'));
+        
+        const columnIndex = column;
+        const columnButton = table.querySelector(`#sortButton${rowColumn}`);
+        const columnHeader = columnButton.closest('th');
+
+        rows.sort((a, b) => {
+            const aValue = a.children[columnIndex].innerText;
+            const bValue = b.children[columnIndex].innerText;
+
+            if (columnIndex === 0 || columnIndex === 1) {
+                return aValue.localeCompare(bValue, undefined, { numeric: true, sensitivity: 'base' });
+            } else {
+                return aValue.localeCompare(bValue, undefined, { numeric: true, sensitivity: 'base' });
+            }
+        });
+
+        if (columnIndex === 0 || columnIndex === 1)  {
+            rows.reverse(); 
+        }
+
+        rows.reverse();
+
+        rows.forEach(row => tbody.appendChild(row));
+
+        const buttons = table.querySelectorAll('.btn');
+        buttons.forEach(button => button.classList.remove('sorted'));
+        const headers = table.querySelectorAll('thead th');
+        headers.forEach(header => header.classList.remove('sorted'));
+
+        columnButton.classList.add('sorted');
+        columnHeader.classList.add('sorted');
+    }
+
+
+
+
+    let advancedCheck = false;
+    let currentCheck = false;
+    
+    function showAdvanced(id){
+        if (advancedCheck){
+            resetData(id);
+        }
+        else {
+            currentCheck = false;
+            advancedCheck = true;
+            document.querySelectorAll('.currentPoint').forEach(element => {
+                element.classList.add('hidden');
+            })
+            document.querySelectorAll('.current').forEach(element =>{
+                    element.classList.add('hidden');
+            })
+            document.querySelectorAll('.advanced').forEach(element =>{
+                element.classList.remove('hidden');
+            })
+        }
+    }
+
+    function showCurrent(id){
+        if (currentCheck){
+            resetData(id);
+        }
+        else {
+            advancedCheck = false;
+            currentCheck = true;
+            document.querySelectorAll('.currentPoint').forEach(element => {
+                element.classList.add('hidden');
+            })
+            document.querySelectorAll('.current').forEach(element =>{
+                    element.classList.remove('hidden');
+            })
+            document.querySelectorAll('.advanced').forEach(element =>{
+                element.classList.add('hidden');
+            })
+        }
+    }
+
+    function resetData(id){
+        currentCheck = false;
+        advancedCheck = false;
+        document.querySelectorAll('.currentPoint').forEach(element => {
+                element.classList.remove('hidden');
+            })
+        document.querySelectorAll('.current').forEach(element =>{
+                element.classList.add('hidden');
+        })
+        document.querySelectorAll('.advanced').forEach(element =>{
+            element.classList.add('hidden');
+        })
+    }
+</script>
+
+<%- include('include/_footer') %>

@@ -3,15 +3,15 @@
     <div class="container">
         <div class="box-nav d-flex justify-between">
             <a href="/match-history" class="text-gradient hidden"><i class="fas fa-angle-double-left"></i> Back</a>
-            <a href="/" class="border-shadow" id="playerlist">
-                <span class="text-gradient">Player List <i class="fas fa-user"></i></span>
-            </a>
-            <a id="leaderboardButton" href="/leaderboard" class="border-shadow">
-                <span class="text-gradient">Leaderboard <i class="fas fa-star"></i></span>
-            </a>   
+        </div>
+
+        <div class="section-head">
+            <span class="eyebrow">New</span>
+            <h1 class="section-heading">New Match</h1>
         </div>
 
         <form action="/api/matchHistory" method="POST" id="add_match">
+            <div class="card card-pad">
             <div class="new_match">
                 <div class="form-group">
                     <label for="team" class="text-light">Team</label>
@@ -37,6 +37,7 @@
 
                 </div>
             </div>
+            </div>
         </form>
     </div>
 </main>
@@ -54,11 +55,5 @@
         }
     });
 </script>
-
-<style>
-    #playerlist {
-        margin-left: 50px;
-    }
-</style>
 
 <%- include('include/_footer') %>

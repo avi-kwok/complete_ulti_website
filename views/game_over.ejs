@@ -6,6 +6,7 @@
             <a id="backButton" href="/match-history" class="text-gradient"><i class="fas fa-angle-double-left"></i> Back </a>
         </div>
         <form>
+            <div class="table-card">
             <table class="table">
                 <thead>
                     <tr id="head">
@@ -26,6 +27,7 @@
                         </tr>
             </tbody>
         </table>
+        </div>
         <table>
             <thead>
                 <tr>
@@ -40,6 +42,7 @@
     </form>
 
     <form>
+            <div class="table-card">
             <table class="table">
                 <thead>
                     <tr id="head2">
@@ -72,8 +75,9 @@
                                 </tr>
                             <% }) %>
                 </tbody>
-                
+
             </table>
+            </div>
         </form>
     </div>
 </main>
@@ -91,26 +95,29 @@
 
 
 <style>
-    #head {
-        background-color: #05124a;
-        color: #fff;
-    }
-    #head2 {
-    background-color: #000e7a;
-    color: #fff;
-    text-align: center;
-    }
+    #head,
+    #head2,
     #pointBreak {
-        background-color: #291234;
-        color: #fff;
+        background-color: var(--card-sunken);
+        color: var(--text-tiny);
+        text-transform: uppercase;
+        letter-spacing: .05em;
+        font-size: .75rem;
+        font-weight: 600;
+    }
+
+    #head2 {
+        text-align: center;
     }
 
     #notOpp{
-        background-color: rgb(197, 252, 197);
+        background-color: var(--emerald-soft);
+        color: var(--text);
     }
 
     #opp {
-        background-color: rgb(255, 188, 188);
+        background-color: var(--rose-soft);
+        color: var(--text);
     }
 </style>
 

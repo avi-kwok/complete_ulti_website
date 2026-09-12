@@ -3,21 +3,13 @@
 
     <main id="site-main">
         <div class="container">
-            
-            <div class="box-nav d-flex justify-between">
-                
-                <a href="/" class="border-shadow">
-                    <span class="text-gradient">Player List <i class="fas fa-user"></i></span>
-                </a>
-                <a id="leaderboardButton" href="/leaderboard" class="border-shadow">
-                    <span class="text-gradient">Leaderboard <i class="fas fa-star"></i></span>
-                </a>
-                <a href="/match-history" class="border-shadow">
-                    <span class="text-gradient">Match History <i class="fas fa-futbol"></i></span>                
-                </a>
+            <div class="section-head">
+                <span class="eyebrow teal">Standings</span>
+                <h1 class="section-heading">Leaderboard</h1>
             </div>
 
             <form action="/" method="POST">
+                <div class="table-card">
                 <table class="table">
                     <thead class="thead-dark">
                         <tr>
@@ -70,12 +62,15 @@
                         <% } %>
                     </tbody>
                 </table>
+                </div>
+                <div class="table-card">
                 <table class="table">
                         <th>
-                            <button id="factory" type='button' onclick="resetAllData()" class="btn">Reset All Data</button>
+                            <button id="factory" type='button' onclick="resetAllData()" class="btn btn-danger">Reset All Data</button>
                         </th>
-                    
+
                 </table>
+                </div>
             </form>
         </div>
     </main>
@@ -83,20 +78,6 @@
 
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            try {
-                const path = window.location.pathname;
-                const leaderboardButton = document.getElementById('leaderboardButton');
-                
-                if (path.includes('/leaderboard')) {
-                    leaderboardButton.classList.add('deactivated');
-                }
-            } catch (error) {
-                console.error('Error in script:', error);
-            }
-        });
-
-
         function sortTable(column) {
             const table = document.querySelector('.table');
             const tbody = table.querySelector('tbody');
@@ -159,18 +140,9 @@
     </script>
 
     <style>
-        #leaderboardButton {
-            margin-left: 25px;
-        }
-
         #factory {
-            background-color: #a80909;
             width: 30%;
         }
-        #factory:hover {
-            background-color: #a80909;
-        }
-
     </style>
 
 <%- include('include/_footer') %>
